@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Subscription - SubScout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fs-2 fw-bold" href="/">SubScout</a>
+            <a href="/logout" class="btn btn-light btn-sm fw-bold text-primary">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container d-flex justify-content-center">
+        <div class="card card-3d shadow-sm p-4  border-0" style="max-width: 500px; width: 100%;">
+            <h3 class="mb-4 fw-bold section-title">Edit Subscription</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ sub.name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Price ($)</label>
+                    <input type="number" step="0.01" name="price" class="form-control" value="{{ sub.price }}" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Due Date</label>
+                    <input type="date" name="due_date" class="form-control" value="{{ sub.due_date }}" required>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn w-100 fw-bold">Save Changes 💾</button>
+                    <a href="/" class="btn w-100 fw-bold">Cancel ❌</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

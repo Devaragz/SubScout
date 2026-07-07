@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - SubScout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='font/bootstrap-icons.min.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="pb-5">
+    <nav class="navbar navbar-dark mb-4 shadow -sm">
+        <div class="container">
+            <a class="navbar-brand fs-2 fw-bold" href="/">SubScout</a>
+            <a href="/logout" class="btn btn-light btn-sm fw-bold text-primary">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if alerts %}
+        <div class="alert alert-danger alert-dismissible fade show alert-card mx-auto mb-4" role="alert">
+            <strong style="font-size:1.15rem" class="reminder-heading">🚨 Reminder:</strong> The following plans are expiring within 7 days:
+            <ul class="mb-0 mt-2">
+                {% for i in alerts %}
+                    <li>{{ i }}</li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        <div class="row d-flex flex-column flex-lg-row align-items-start">
+            <div class="col-lg-4 mob-wrap">
+                <div style="order:2;" class="mb-4 w-100">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header fw-bold section-title">
+                            + Add Subscription
+                        </div>
+                        <div class="card-body bg-transparent">
+                            <form method="POST" action="/">
+                                <div class="row mb-3 align-items-center">
+                                    <label class="col-sm-3 col-form-label fw-bold">NAME</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <label class="col-sm-3 col-form-label fw-bold">PRICE ($)</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" step="0.01" name="price" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <label class="col-sm-3 col-form-label fw-bold">DUE DATE</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" name="due_date" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <label class="col-sm-3 col-form-label fw-bold">Bill Cycle</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-select" name="billing_cycle" required>
+                                            <option value="Monthly" selected>Monthly</option>
+                                            <option value="Yearly">Yearly</option>
+                                            <option value="One-Time">One-Time</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 align-items-center">
+                                    <label class="col-sm-3 col-form-label fw-bold">Category</label>
+                                    <div class="col-sm-9">
+                                        <select name="category" class="form-select" required>
+                                            <option value="" disabled selected>Select a category...</option>
+                                            <option value="Entertainment">Entertainment 🍿</option>
+                                            <option value="Productivity">Productivity 💼</option>
+                                            <option value="Utilities">Utilities 💡</option>
+                                            <option value="Shopping">Shopping 🛍️</option>
+                                            <option value="Other">Other 📦</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn w-100 fw-bold mt-3">Add ➕</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div style="order:4;" class="mb-4 w-100">
+                    <div class="card card-3d shadow-sm border-0 mb-4 mt-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold section-title mb-3 text-center">Category Breakdown</h5>
+                            <canvas id="expenseChart" style="max-height: 350px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 mob-wrap">
+                <div style="order:1;" class="mb-4 w-100">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header fw-bold section-title d-flex jusify-content-between align-items-center">
+                            <span>Subscriptions</span>
+                                <select id="categoryFilter" class="form-select w-auto form-select-sm ms-auto">
+                                    <option value="All">All</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Productivity">Productivity</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                        </div>
+                        <div class="card-body p-0 table-responsive bg-transparent">
+                            <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>
+                                            Name
+                                            <a href="/?sort=name&dir=asc" style="display:inline;">⬆️</a>
+                                            <a href="/?sort=name&dir=desc" style="display:inline;">⬇️</a>
+                                        </th>
+                                        <th>
+                                            Price
+                                            <a href="/?sort=price&dir=asc" style="display:inline;">⬆️</a>
+                                            <a href="/?sort=price&dir=desc" style="display:inline;">⬇️</a>
+                                        </th>
+                                        <th>
+                                            Due Date
+                                            <a href="/?sort=due_date&dir=asc" style="display:inline;">⬆️</a>
+                                            <a href="/?sort=due_date&dir=desc" style="display:inline;">⬇️</a>
+                                        </th>
+                                        <th>Bill-Cycle</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for sub in subs %}
+                                    <tr data-category="{{sub['category']}}">
+                                        <td class="aligh-middle fw-bold">{{ sub["name"] }}</td>
+                                        <td class="align-middle">${{ sub["price"] }}</td>
+                                        <td class="align-middle">{{ sub["due_date"] }}</td>
+                                        <td class="align-middle">
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{sub.get('billing_cycle','Monthly')}}">
+                                                {{ sub.get('billing_cycle','Monthly')[:1] }}ℹ️
+                                            </span>
+                                        </td>
+                                        <td class="align-middle">
+                                            <a href="/edit/{{ sub['id'] }}" class="btn btn-outline btn-sm">Edit ✏️</a>
+                                            <form action="/delete" method="POST" style="display:inline;">
+                                                <input type="hidden" name="sub_id" value="{{ sub['id'] }}">
+                                                <button class="btn btn-outline btn-sm" type="submit">Delete 🗑️</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-dark shadow-sm text-center" style="background-color:#1e1e1e;border:1px solid #2a2a2a;color:#ffffff;">
+                        <h5 class="mb-0 fw-bold">Total Monthly Cost: ${{ tot }} <a href="/export" class="btn btn-warning btn-sm fw-bold position-absolute end-0 me-3 text-decoration-none">CSV📩</a></h5>
+                    </div>
+                <!--<div class="mb-4 w-100" style="order:3;">
+                    <h4 class="text-secondary border-bottom border-danger pb-2">Expired Subscriptions</h4>
+                    <table class="table table-dark table-hover mt-3" style="background-color:transparent !important;--bs-table-bg:transparent;">
+                        <thead>
+                            <tr style="color: #ff4444 !important; font-weight: bold;border-bottom: 1px solid #333;">
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Expired on</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in exp_subs %}
+                            <tr class="text-muted">
+                                <td class="align-middle">{{ sub.name }}</td>
+                                <td class="align-middle">${{ sub.price }}</td>
+                                <td class="align-middle">{{ sub.due_date }}</td>
+                                <td class="align-middle">
+                                    <a href="/edit/{{ sub.id }}" class="btn btn-outline-secondary btn-sm">Renew 🔁</a>
+                                    <form action="/delete" method="POST" class="d-inline">
+                                        <input type="hidden" name="sub_id" value="{{ sub.id }}">
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm">Remove 🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>-->
+                <div class="mb-4 w-100" style="order:5;">
+                    <div class="card card-3d shadow-sm border-0 mb-4 mt-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold section-title mb-3">Spending Trend <i class="bi bi-graph-up-arrow"></i></h5>
+                            <canvas id="trendChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                {% for cat in category_totals %}
+                    "{{ cat.category if cat.category else 'Uncategorized' }}",
+                {% endfor %}
+            ],
+            datasets: [{
+                data: [
+                    {% for cat in category_totals %}
+                        {{ cat.total_cost }},
+                    {% endfor %}
+                ],
+                backgroundColor: ['#e67e22', '#2980b9', '#8e44ad', '#27ae60', '#d35400'],
+                borderColor: '#1a1a1a',
+                borderWidth: 3,
+                borderRadius: 5,             /* Rounds the corners for a modern look */
+                hoverOffset: 4                /* Makes the slice pop out when hovered */
+            }]
+        },
+        options: {
+            cutout: '75%',                    /* Makes the doughnut ring thinner and more elegant */
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#f8f9fa', padding: 20 } }
+            },
+            layout: {
+                padding: 10
+            }
+        }
+    });
+</script>
+<script>
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: {{month_labels | tojson}},
+            datasets: [{
+                label: 'Spending Trend',
+                data: {{trend_data | tojson}},
+                borderColor: '#e67e22',
+                backgroundColor: 'rgba(230,126,34,0.15)',
+                borderWidth: 3,
+                pointBackgroundColor: '#1a1a1a',
+                pointBorderColor: '#e67e22',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                fill: true,
+                tension: 0.4 /* Makes the line smoothly curved */
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x:{
+                    grid:{color:'rgba(255,255,255,0.05)',borderColor:'transparent'},
+                    tricks:{color:'#a0a0a0',font:{size:11}}
+                },
+                y:{
+                    grid:{color:'rgba(255,255,255,0.05)',borderColor:'transparent'},
+                    tricks:{color:'#a0a0a0',font:{size:11}}
+                }
+            }
+        }
+    });
+</script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+<script>
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    let filterValue = this.value;
+    let rows = document.querySelectorAll('.table tbody tr');
+
+    rows.forEach(row => {
+        // We need a way to read the row's category here!
+        let rowCategory = row.getAttribute('data-category');
+
+        if (filterValue === 'All' || rowCategory === filterValue) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+</script></div>
+</body>
+</html>
+
+

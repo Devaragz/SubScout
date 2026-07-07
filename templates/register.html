@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - SubScout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card card-3d shadow-sm p-4" style="max-width: 400px; width: 100%;">
+            <h3 class="text-center mb-4 hed">Create an Account</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Username</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn w-100 fw-bold">Register 🔐</button>
+                <div class="text-center mt-3">
+                    <a href="/login" class="text-decoration-none fw-bold" style="color: #ff8c00;">Already have an account? Login here.</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

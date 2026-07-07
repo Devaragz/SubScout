@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* 1.Main   BG */
+body {
+    background-color: #050505 !important;
+    background-image:
+        radial-gradient(circle at 15% 20%,rgba(255,140,0,0.35) 0%,transparent 25%),
+        radial-gradient(circle at 85% 75%,rgba(255,140,0,0.30) 0%,transparent 30%) !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    color: #ffffff !important;
+    font-family: 'Poppins',sans-serif !important;
+}
+
+/* 2.Glassmorphism */
+.navbar{
+    background:rgba(255,255,255,0.05) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.navbar-brand{
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(to right,#ff8c00,#ff3b00);
+    -webkit-background-clip: text;
+    color: transparent !important;
+    letter-spacing: 1px;
+}
+
+/* 3.Dark rounded card */
+.card {
+    background-color: rgba(10,10,10,0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    border-radius: 16px;
+    transition: transform 0.3s ease,box-shadow 0.3s ease !important;
+}
+.card-3d:hover{
+    transform: translateY(-6px) !important;
+    box-shadow: 0 12px 24px rgba(255,140,0,0.4),0 0 20px rgba(255,140,0,0.2) !important;
+}
+
+/* 4.Clean tables */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important
+    color: #e0e0e0 !important;
+}
+.table th{
+    border: none !important;
+    border-bottom: 1px solid #333 !important;
+    color: #a0a0a0 !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05rem !important;
+    background-color: transparent !important;
+}
+.table td{
+    border: none !important;
+    background-color: #1a1a1a !important;
+}
+.table tbody tr{
+    transition: all 0.3s ease !important;
+}
+.table tbody tr:hover{
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5) !important;
+    background-color: rgba(255,140,0,0.05) !important;
+}
+.table tbody tr:hover td{
+    background-color: rgba(255,140,0,0.15) !important;
+    color:#ffffff !important;
+}
+
+/* Form Labels */
+form label{
+    color: #a0a0a0 !important;
+    font-size: 0.8rem !important;
+    text-transform:uppercase;
+    letter-spacing: 0.05rem;
+    margin-bottom: 5px;
+}
+input, .form-control,select{
+    background-color: #1a1a1a !important;
+    border:1px solid #333 !important;
+    color:#ffffff !important;
+    border-radius:8px !important;
+    padding:10px 15px !important;
+ }
+input:focus, .form-control:focus,select:focus{
+   background-color: #222 !important;
+   border-color: #e67e22 !important;
+   box-shadow:0 0 0 3px rgba(230,126,34,0.2) !important;
+   outline: none !important;
+}
+
+
+/* 6.elegant primary buttons */
+.btn{
+    background-color: #e67e22 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    border: none !important;
+    transition: all 0.3 ease !important;
+}
+.btn:hover{
+    background-color: #d35400 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 15px rgba(230,126,34,0.25) !important;
+}
+.btn-outline{
+    background-color: transparent !important;
+    color: #e67e22 !important;
+    border: 1px solid rgba(230,126,34,0.5) !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+}
+.btn-outline:hover{
+    background-color:rgba(230,126,34,0.1) !important;
+    border-color: #e67e22 !important;
+}
+
+/* 7.glass alert */
+.alert-danger{
+    background:rgba(220,53,69,0.1) !important;
+    border:1px solid rgba(220,53,69,0.3) !important;
+    color: #ffa8a !important;
+    background-filter:blur(10px) !important;
+    animation: pulse 1.2s ease-out forwards !important;
+}
+
+.section-title{
+    color: #f8f9fa !important;
+    font-size: 1.7rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+    border-left: 4px solid #ff8c00;
+    padding-left: 10px;
+    /*color: #ff8c00 !important;
+    font-size: 1.7rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;*/
+}
+
+.hed{
+    font-size: 2.8rem !important;
+    color: #ff8c00 !important;
+}
+
+@keyframes pulse{
+    0% { opacity:0;transform:translateY(-20px); }
+    50% { box-shadow:0 0 20px rgba(255,0,0,0.6); }
+    100% { opacity:1;transform:translateY(0px); }
+}
+
+.reminder-heading{
+    font-size: 1.2rem !important;
+    color: #ff6b6b !important;
+    letter-spacing: 0.5px;
+}
+.alert-card{
+    max-width: 450px;
+    margin: 0 auto;
+    border-radius: 12px;
+}
+
+/* Mobile view */
+/* 8. Mobile Responsiveness */
+@media (max-width: 991px) {
+    /* Stack columns on top of each other */
+    .row {
+        flex-direction: column;
+    }
+
+    /* Ensure cards have breathing room on mobile */
+    .col-lg-4, .col-lg-8 {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* Make table scrollable horizontally without breaking the layout */
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 991px) {
+    .mob-wrap {
+        display: contents;
+    }
+}
