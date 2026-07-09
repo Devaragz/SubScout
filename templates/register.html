@@ -8,16 +8,16 @@
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card card-3d shadow-sm p-4" style="max-width: 400px; width: 100%;">
+        <div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto card card-3d shadow-sm p-4">
             <h3 class="text-center mb-4 hed">Create an Account</h3>
-            <form method="POST">
+        <form method="POST">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <label class="form-label fw-bold">Email</label>
+                    <input type="email" name="email" class="form-control" required>
                 </div>
                 <div class="mb-4">
                     <label class="form-label fw-bold">Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <input type="password" name="password" class="form-control" autocomplete="new-password" required>
                 </div>
                 <button type="submit" class="btn w-100 fw-bold">Register 🔐</button>
                 <div class="text-center mt-3">

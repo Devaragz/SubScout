@@ -19,37 +19,41 @@ def get_db():
 
 @app.route("/register",methods=["GET","POST"])
 def register():
-    if request.method=="POST":
-        username=request.form.get("username")
-        password=request.form.get("password")
-        hash_pw=generate_password_hash(password)
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        hash_pw = generate_password_hash(password)
 
-        conn=get_db()
-        cur=conn.cursor()
-        cur.execute("INSERT INTO users (username,password) VALUES (?,?)",(username,hash_pw))
-        conn.commit()
-        conn.close()
-        flash("Registration Successful! Please login.","success")
-        return redirect("/login")
+        conn = get_db()
+        cur = conn.cursor()
+        try:
+            cur.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, hash_pw))
+            conn.commit()
+            flash("Registration Successful! Please login.", "success")
+            return redirect("/login")
+        except sqlite3.IntegrityError:
+            flash("Email already registered.", "danger")
+        finally:
+            conn.close()
     return render_template("register.html")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
-    if request.method=="POST":
-        username = request.form.get("username")
+    if request.method == "POST":
+        email = request.form.get("email")
         password = request.form.get("password")
 
-        conn=get_db()
-        cur=conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username = ?", (username,))
-        user=cur.fetchone()
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE email = ?", (email,))
+        user = cur.fetchone()
         conn.close()
 
-        if user and check_password_hash(user["password"],password):
+        if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
             return redirect("/")
         else:
-            return "Invalid username or password"
+            flash("Invalid email or password", "danger")
     return render_template("login.html")
 
 @app.route("/logout")
@@ -206,6 +210,37 @@ def edit_sub(id):
     if not sub:
         return redirect("/")
     return render_template("edit.html",sub=sub)
+
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    cur_user = session.get("user_id")
+    if not cur_user:
+        return redirect("/login")
+
+    current_password = request.form.get("current_pwd")
+    new_password = request.form.get("new_pwd")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # Get current user data
+    cur.execute("SELECT * FROM users WHERE id = ?", (cur_user,))
+    user = cur.fetchone()
+
+    # Verify old password
+    if user and check_password_hash(user["password"], current_password):
+        new_hash = generate_password_hash(new_password)
+
+        # 💾 The SQL UPDATE command:
+        cur.execute("UPDATE users SET password = ? WHERE id = ?", (new_hash, cur_user))
+
+        conn.commit()
+        flash("Password updated successfully!", "success")
+    else:
+        flash("Incorrect current password.", "danger")
+
+    conn.close()
+    return redirect("/")
 
 if __name__=="__main__":
     app.run(debug=True)

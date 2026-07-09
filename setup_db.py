@@ -1,15 +1,16 @@
 import sqlite3
 
-conn=sqlite3.connect("subscriptions.db")
-cur=conn.cursor()
+conn = sqlite3.connect("subscriptions.db")
+cur = conn.cursor()
+cur.execute("DROP TABLE IF EXISTS subscriptions")
+cur.execute("DROP TABLE IF EXISTS users")
 cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY,
-        username TEXT NOT NULL,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL
     )
 """)
-cur.execute('''DROP TABLE IF EXISTS subscriptions''')
 cur.execute('''
     CREATE TABLE IF NOT EXISTS subscriptions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,4 +25,4 @@ cur.execute('''
 ''')
 conn.commit()
 conn.close()
-print("DB setup complete!")
+print("DB setup complete with email!")

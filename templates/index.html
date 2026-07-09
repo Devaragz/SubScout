@@ -5,14 +5,16 @@
     <title>Dashboard - SubScout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{url_for('static',filename='font/bootstrap-icons.min.css')}}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="pb-5">
     <nav class="navbar navbar-dark mb-4 shadow -sm">
         <div class="container">
             <a class="navbar-brand fs-2 fw-bold" href="/">SubScout</a>
-            <a href="/logout" class="btn btn-light btn-sm fw-bold text-primary">Logout</a>
+            <div>
+                <button type="button" class="btn btn-outline-warning btn-sm fw-bold me-2" data-bs-toggle="modal" data-bs-target="#settingsModal">⚙️</button>
+                <a href="/logout" class="btn btn-light btn-sm fw-bold text-primary">Logout</a>
+            </div>
         </div>
     </nav>
 
@@ -28,7 +30,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endif %}
-        <div class="row d-flex flex-column flex-lg-row align-items-start">
+        <div class="row d-flex flex-column flex-lg-row align-items-start gx-5">
             <div class="col-lg-4 mob-wrap">
                 <div style="order:2;" class="mb-4 w-100">
                     <div class="card shadow-sm border-0 mb-4">
@@ -84,8 +86,8 @@
                     </div>
                 </div>
                 <div style="order:4;" class="mb-4 w-100">
-                    <div class="card card-3d shadow-sm border-0 mb-4 mt-4">
-                        <div class="card-body">
+                    <div class="card card-3d shadow-sm border-0 mb-5 mt-5">
+                        <div class="card-body p-4">
                             <h5 class="fw-bold section-title mb-3 text-center">Category Breakdown</h5>
                             <canvas id="expenseChart" style="max-height: 350px;"></canvas>
                         </div>
@@ -159,39 +161,11 @@
                     <div class="alert alert-dark shadow-sm text-center" style="background-color:#1e1e1e;border:1px solid #2a2a2a;color:#ffffff;">
                         <h5 class="mb-0 fw-bold">Total Monthly Cost: ${{ tot }} <a href="/export" class="btn btn-warning btn-sm fw-bold position-absolute end-0 me-3 text-decoration-none">CSV📩</a></h5>
                     </div>
-                <!--<div class="mb-4 w-100" style="order:3;">
-                    <h4 class="text-secondary border-bottom border-danger pb-2">Expired Subscriptions</h4>
-                    <table class="table table-dark table-hover mt-3" style="background-color:transparent !important;--bs-table-bg:transparent;">
-                        <thead>
-                            <tr style="color: #ff4444 !important; font-weight: bold;border-bottom: 1px solid #333;">
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Expired on</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for sub in exp_subs %}
-                            <tr class="text-muted">
-                                <td class="align-middle">{{ sub.name }}</td>
-                                <td class="align-middle">${{ sub.price }}</td>
-                                <td class="align-middle">{{ sub.due_date }}</td>
-                                <td class="align-middle">
-                                    <a href="/edit/{{ sub.id }}" class="btn btn-outline-secondary btn-sm">Renew 🔁</a>
-                                    <form action="/delete" method="POST" class="d-inline">
-                                        <input type="hidden" name="sub_id" value="{{ sub.id }}">
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm">Remove 🗑️</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>-->
+
                 <div class="mb-4 w-100" style="order:5;">
-                    <div class="card card-3d shadow-sm border-0 mb-4 mt-4">
-                        <div class="card-body">
-                            <h5 class="fw-bold section-title mb-3">Spending Trend <i class="bi bi-graph-up-arrow"></i></h5>
+                    <div class="card card-3d shadow-sm border-0 mb-5 mt-5">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold section-title mb-3">Spending Trend</h5>
                             <canvas id="trendChart" style="max-height: 250px;"></canvas>
                         </div>
                     </div>
@@ -294,6 +268,23 @@ document.getElementById('categoryFilter').addEventListener('change', function() 
     });
 });
 </script></div>
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-light border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold text-warning">Account Settings</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/change-password" method="POST">
+            <input type="password" name="current_pwd" placeholder="Current Password" required class="form-control mb-3 bg-dark text-white border-secondary">
+            <input type="password" name="new_pwd" placeholder="New Password" required class="form-control mb-3 bg-dark text-white border-secondary">
+            <button type="submit" class="btn btn-warning fw-bold w-100">Update Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
 
