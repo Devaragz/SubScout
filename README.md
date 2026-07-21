@@ -3,7 +3,6 @@
 A smart subscription management dashboard built with Python and Flask. SubScout helps users track their recurring expenses, visualize spending trends, and avoid surprise auto-renewals.
 
 ![SubScout Dashboard](./screenshot.png) 
-*(Note: Rename your uploaded image to `screenshot.png` so it appears here)*
 
 ## ✨ Core Features
 * **Smart Cost Calculation:** Accurately calculates the *True Monthly Cost* by automatically filtering out "Yearly" and "One-Time" expenses.
